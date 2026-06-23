@@ -148,9 +148,32 @@ public class HospitalSystem {
                 patientMap.get(queueNumber);
 
         if (patient == null) {
+                    patient = patientMap.get(queueNumber.toUpperCase());
+            return;
+        }
 
-            System.out.println(
-                    "Patient Not Found");
+        if (patient == null) {
+
+            ArrayList<Patient> nameMatches = new ArrayList<>();
+            String lowerCaseQuery = queueNumber.toLowerCase();
+
+            for (Patient p : patientMap.values()) {
+                if (p.getName().toLowerCase().contains(lowerCaseQuery)) {
+                    nameMatches.add(p);
+                }
+            }
+
+
+            if (nameMatches.isEmpty()) {
+                System.out.println("Patient Not Found");
+                return;
+            }
+
+
+            System.out.println("\n=== PATIENT INFO (FOUND BY NAME) ===");
+            for (Patient p : nameMatches) {
+                System.out.println(p);
+            }
             return;
         }
 
