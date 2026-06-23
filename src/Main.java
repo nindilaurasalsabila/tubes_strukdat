@@ -141,7 +141,7 @@ public class Main {
                 case 3:
 
                     System.out.print(
-                            "Queue Number : ");
+                            "Queue Number/ Patient's Name: ");
 
                     String search =
                             sc.nextLine();
@@ -154,7 +154,7 @@ public class Main {
                 case 4:
 
                     System.out.print(
-                            "Queue Number : ");
+                            "Queue Number only: ");
 
                     String queue =
                             sc.nextLine();

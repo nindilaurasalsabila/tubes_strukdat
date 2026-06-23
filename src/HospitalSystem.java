@@ -30,9 +30,7 @@ public class HospitalSystem {
     private int normalCounter = 1;
     private int emergencyCounter = 1;
 
-    public void registerPatient(String name,
-                                String complaint,
-                                int urgency) {
+    public void registerPatient(String name, String complaint, int urgency) {
 
         String queueNumber;
         Patient patient;
@@ -58,20 +56,24 @@ public class HospitalSystem {
                             normalCounter++);
 
             patient =
-                    new Patient(queueNumber,
-                            name,
-                            complaint,
-                            urgency);
+                    new Patient(queueNumber, name, complaint, urgency);
 
             normalQueue.offer(patient);
         }
 
-        patientMap.put(queueNumber,
-                patient);
+        patientMap.put(queueNumber, patient);
 
-        System.out.println("\nRegistration Success!");
-        System.out.println("Queue Number : "
-                + queueNumber);
+        System.out.println("\n=============================================");
+        System.out.println("         REGISTRATION SUCCESSFUL!            ");
+        System.out.println("=============================================");
+        System.out.printf(" Ticket Number     : %s\n", queueNumber);
+        System.out.printf(" Patient Name      : %s\n", name);
+        System.out.printf(" Category          : %s\n", (urgency >= 7 ? "EMERGENCY (Priority)" : "NORMAL"));
+
+        int position = getQueuePosition(queueNumber);
+        System.out.printf(" Queue Position    : %d patient(s) ahead of you\n", position);
+        System.out.printf(" Est. Waiting Time : %d Minutes\n", (position + 1) * 10);
+        System.out.println("=============================================");
     }
 
     public void viewQueues() {
@@ -114,24 +116,21 @@ public class HospitalSystem {
         Patient patient = null;
 
         if (!emergencyQueue.isEmpty()) {
-
             patient =
                     emergencyQueue.poll();
-
         } else if (!normalQueue.isEmpty()) {
-
             patient =
                     normalQueue.poll();
         }
-
         if (patient == null) {
-
             System.out.println(
                     "\nNo patient waiting.");
             return;
         }
 
         patient.setStatus("Served");
+
+        patient.setServedTime(System.currentTimeMillis());
 
         history.add(patient);
 
@@ -141,19 +140,16 @@ public class HospitalSystem {
         System.out.println(patient);
     }
 
-    public void searchPatient(
-            String queueNumber) {
+    public void searchPatient( String queueNumber) {
+        Patient patient = patientMap.get(queueNumber);
 
-        Patient patient =
-                patientMap.get(queueNumber);
 
         if (patient == null) {
-                    patient = patientMap.get(queueNumber.toUpperCase());
-            return;
+            patient = patientMap.get(queueNumber.toUpperCase());
         }
 
-        if (patient == null) {
 
+        if (patient == null) {
             ArrayList<Patient> nameMatches = new ArrayList<>();
             String lowerCaseQuery = queueNumber.toLowerCase();
 
@@ -177,9 +173,8 @@ public class HospitalSystem {
             return;
         }
 
-        System.out.println(
-                "\n=== PATIENT INFO ===");
 
+        System.out.println("\n=== PATIENT INFO ===");
         System.out.println(patient);
     }
 
@@ -289,6 +284,38 @@ public class HospitalSystem {
         System.out.println(
                 "Normal Waiting : "
                         + normalQueue.size());
+
+        long totalWaitingTimeMs = 0;
+        long maxWaitingTimeMs = 0;
+        Patient longestWaitingPatient = null;
+
+        for (Patient p : history) {
+            long waitingTimeMs = p.getServedTime() - p.getArrivalTime();
+            totalWaitingTimeMs += waitingTimeMs;
+
+
+            if (waitingTimeMs > maxWaitingTimeMs) {
+                maxWaitingTimeMs = waitingTimeMs;
+                longestWaitingPatient = p;
+            }
+        }
+
+
+        double averageWaitingTimeMin = (double) totalWaitingTimeMs / history.size() / 60000.0;
+        double longestWaitingTimeMin = (double) maxWaitingTimeMs / 60000.0;
+
+
+        System.out.printf("Average Patient Waiting Time: %.2f Minutes\n", averageWaitingTimeMin);
+
+        if (longestWaitingPatient != null) {
+            System.out.printf("Longest Waiting Patient     : %s (%s) with %.2f Minutes\n",
+                    longestWaitingPatient.getName(),
+                    longestWaitingPatient.getQueueNumber(),
+                    longestWaitingTimeMin);
+        } else {
+            System.out.println("Longest Waiting Patient     : None");
+        }
+        System.out.println("========================");
     }
 
     private int getQueuePosition(String queueNumber) {
@@ -307,6 +334,8 @@ public class HospitalSystem {
         }
         return position;
     }
+
+
 
 
 }

@@ -6,6 +6,10 @@ public class Patient {
     private int urgencyLevel;
     private String status;
     private long arrivalTime;
+    private long servedTime;
+
+
+
 
     public Patient(String queueNumber, String name,
                    String complaint, int urgencyLevel) {
@@ -16,6 +20,7 @@ public class Patient {
         this.urgencyLevel = urgencyLevel;
         this.status = "Waiting";
         this.arrivalTime = System.currentTimeMillis();
+        this.servedTime = 0;
     }
 
     public String getQueueNumber() {
@@ -44,6 +49,14 @@ public class Patient {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getServedTime() {
+        return servedTime;
+    }
+
+    public void setServedTime(long servedTime) {
+        this.servedTime = servedTime;
     }
 
     @Override
