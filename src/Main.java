@@ -58,29 +58,22 @@ public class Main {
 
                 case 2:
 
-                    System.out.print(
-                            "Name : ");
-                    String name =
-                            sc.nextLine();
+                    System.out.print("Name : ");
+                    String name = sc.nextLine();
 
-                    System.out.print(
-                            "Complaint : ");
-                    String complaint =
-                            sc.nextLine();
+                    System.out.print("Complaint : ");
+                    String complaint = sc.nextLine();
 
-                    System.out.print(
-                            "Urgency (1-10) : ");
-
-                    int urgency =
-                            sc.nextInt();
-
+                    System.out.print("Urgency (1-10) : ");
+                    int urgency = sc.nextInt();
                     sc.nextLine();
 
-                    hospital.registerPatient(
-                            name,
-                            complaint,
-                            urgency);
 
+                    hospital.registerPatient(name, complaint, urgency);
+
+
+                    System.out.print("\nPress Enter to return to Main Menu...");
+                    sc.nextLine();
                     break;
 
                 case 3:
@@ -135,6 +128,8 @@ public class Main {
 
             switch (choice) {
 
+
+
                 case 1:
                     hospital.viewQueues();
                     break;
@@ -176,6 +171,12 @@ public class Main {
                 case 6:
                     hospital.dailyReport();
                     break;
+            }
+
+
+            if (choice != 7) {
+                System.out.print("\nPress Enter to continue...");
+                sc.nextLine();
             }
 
         } while (choice != 7);

@@ -267,4 +267,23 @@ public class HospitalSystem {
                 "Normal Waiting : "
                         + normalQueue.size());
     }
+
+    private int getQueuePosition(String queueNumber) {
+        int position = 0;
+        if (queueNumber.startsWith("E")) {
+            for (Patient p : emergencyQueue) {
+                if (p.getQueueNumber().equals(queueNumber)) break;
+                position++;
+            }
+        } else {
+            position += emergencyQueue.size();
+            for (Patient p : normalQueue) {
+                if (p.getQueueNumber().equals(queueNumber)) break;
+                position++;
+            }
+        }
+        return position;
+    }
+
+
 }
